@@ -1,0 +1,901 @@
+/* ===== GLOBAL ===== */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; /* no scrollbars */
+}
+
+/* ==== OVERRIDES FOR FERAL PAGE SCROLL ==== */
+
+/* override height + overflow for <html> when feral-page is active */
+html.feral-page {
+  height: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* override height + overflow for <body> on feral page */
+body.feral-page {
+  background: linear-gradient(to bottom, #1a0127, #5d0c70);
+  height: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+body {
+  background: linear-gradient(to bottom, #18080b, #810707);
+  font-family: 'Orbitron', sans-serif;
+  color: #fff;
+}
+
+/* Background logo */
+.background-logo {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.20;
+}
+.background-logo img {
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  filter: grayscale(100%) brightness(110%);
+  user-select: none;
+}
+
+.layout-wrapper {
+  width: 100%;
+  max-width: 950px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.top-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 80px 0 80px;
+  font-size: 4rem;
+  letter-spacing: 0rem;
+}
+.top-nav span {
+  margin: 0 40px;
+  letter-spacing: 2.5rem;
+}
+.logo {
+  margin: 0 50px;
+  height: 5.8rem;
+  width: auto;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  left: -15px;
+}
+
+/* main content gets fixed height under nav */
+.main-content {
+  display: flex;
+  flex-direction: row;
+  width: 96%;
+  margin-top: 80px;
+  height: calc(100vh - 80px);
+  box-sizing: border-box;
+}
+
+/* SIDEBAR BUTTONS */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 180px;
+  padding-left: 60px;
+  padding-right: 40px;
+  gap: 44px;
+  font-size: 1.2rem;
+  letter-spacing: 0.25rem;
+}
+
+.sidebar div,
+.sidebar a {
+  color: #fff;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.25rem;
+  font-size: 1.2rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s;
+  display: block;
+  margin: 0;
+  padding: 0;
+  outline: none;
+}
+
+.sidebar div.selected {
+  color: #ff6666;
+  cursor: default;
+}
+
+.sidebar div:not(.selected):hover,
+.sidebar a:hover,
+.sidebar a:focus {
+  color: #ff2d2d;
+}
+
+/* Medusa page: make menu hover bright green instead of red */
+.medusa-page-alt .sidebar div:not(.selected):hover,
+.medusa-page-alt .sidebar a:hover,
+.medusa-page-alt .sidebar a:focus {
+  color: #3bff5a !important;
+}
+
+/* Sidebar links: fix underline/focus/flicker */
+.sidebar a:visited {
+  color: #fff;
+  text-decoration: none;
+}
+.sidebar a:focus {
+  outline: none;
+  color: #ff2d2d;
+  text-decoration: none;
+}
+.sidebar a:hover,
+.sidebar a:focus {
+  color: #ff2d2d !important;
+  text-decoration: none;
+  outline: none;
+}
+
+/* ===== HOME PAGE PROFILES ===== */
+
+.profiles {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.profile-circle {
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  margin-top: -20px;
+  overflow: hidden;
+  position: relative;
+  background: #222;
+  box-shadow: 0 4px 36px rgba(0,0,0,0.8);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 2;
+}
+.profile-circle.left,
+.profile-circle.right {
+  margin-top: -20px;
+}
+.profile-circle.middle {
+  margin-top: 200px;
+}
+
+/* Info boxes: behind circles with z-index: 1 */
+.info-box {
+  position: absolute;
+  width: 175px;
+  min-height: 80px;
+  background: rgba(255, 136, 136, 0.24);
+  border-radius: 40px;
+  z-index: 1;
+  padding: 16px 25px;
+  color: #fff;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  text-align: left;
+  letter-spacing: 0.2rem;
+  pointer-events: auto;
+  display: none;
+}
+.info-box ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.info-box ul li {
+  margin-bottom: 10px;
+}
+
+.bio-info {
+  left: 1px;
+  top: 80px;
+}
+.education-info {
+  left: 50%;
+  top: 60px;
+  transform: translateX(-50%);
+}
+.skills-info {
+  right: 4px;
+  top: 80px;
+  left: auto;
+}
+
+/* Show info box on hover of corresponding circle or box */
+.profile-circle.left:hover ~ .bio-info,
+.bio-info:hover {
+  display: block;
+}
+.profile-circle.middle:hover ~ .education-info,
+.education-info:hover {
+  display: block;
+}
+.profile-circle.right:hover ~ .skills-info,
+.skills-info:hover {
+  display: block;
+}
+
+/* Responsive styles */
+@media (max-width: 900px) {
+  .layout-wrapper {
+    max-width: 100%;
+  }
+  .profiles {
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+  .bio-info,
+  .skills-info,
+  .education-info {
+    left: 50% !important;
+    transform: translateX(-50%);
+    right: auto !important;
+    top: 260px;
+  }
+}
+
+/* Profile image effect */
+.profile-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(100%);
+  transition: filter 0.3s;
+  position: relative;
+  z-index: 2;
+}
+.profile-circle:hover img {
+  filter: none;
+}
+
+/* Circle labels */
+.profile-label {
+  position: absolute;
+  bottom: 54px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  text-align: center;
+  letter-spacing: 0.5rem;
+  color: #fff;
+  font-size: 0.7rem;
+  font-family: 'Orbitron', sans-serif;
+  text-shadow: 0 0 6px #000;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ===== PORTFOLIO PAGE ===== */
+
+.featured-panel {
+  width: 95%;
+  aspect-ratio: 4.4 / 1;
+  background: #222;
+  border-radius: 36px;
+  box-shadow: 0 8px 42px rgba(0,0,0,0.7);
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-left: 46px;
+}
+
+/* make whole featured area clickable without changing text style */
+.featured-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.featured-img,
+.portfolio-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(100%);
+  transition: filter 0.35s ease, transform 0.35s ease;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Hover: color and zoom in */
+.featured-panel:hover .featured-img,
+.portfolio-card:hover .portfolio-img {
+  filter: grayscale(0%);
+  transform: scale(1.08);
+}
+
+.featured-title {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  text-align: left;
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+}
+.featured-title h1 {
+  letter-spacing: 2.5rem;
+  font-size: 3.2rem;
+  margin: 0 0 12px 0;
+}
+.featured-title span {
+  font-size: 1.2rem;
+  letter-spacing: 0.6rem;
+}
+
+.portfolio-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2vw;
+  margin-top: 30px;
+  box-sizing: border-box;
+  background: transparent;
+  overflow: visible;
+}
+
+/* card button wrapper */
+.portfolio-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.portfolio-card {
+  width: 100%;
+  aspect-ratio: 0.95 / 1;
+  background: #111;
+  border-radius: 26px;
+  box-shadow: 0 4px 34px rgba(0,0,0,0.6);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-end;
+  min-width: 180px;
+}
+
+.portfolio-img {
+  width: 100%;
+  aspect-ratio: 1.75 / 1.25;
+  object-fit: cover;
+  filter: grayscale(100%);
+  transition: filter 0.3s;
+}
+.portfolio-card:hover .portfolio-img {
+  filter: none;
+}
+.portfolio-label {
+  font-size: 0.8rem;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.35rem;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 26px;
+  margin-top: 16px;
+  z-index: 2;
+}
+
+/* Disable hover effect for THE ENTITY and MIDNIGHT SMILE */
+.portfolio-card.entity-card:hover .portfolio-img,
+.portfolio-card.midnight-card:hover .portfolio-img {
+  filter: grayscale(100%);
+  transform: none;
+}
+
+/* ===== CONTACTS PAGE ===== */
+
+.contacts-wrapper {
+  width: 100%;
+  max-width: 900px;
+  margin: 80px auto 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Whole bar */
+.contact-bar {
+  height: 110px;
+  display: flex;
+  align-items: center;
+}
+
+/* Text bar – gradient box that holds the icon + text */
+.contact-bar-text {
+  flex: 1;
+  height: 110px;
+  border-radius: 40px;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.95),
+    rgba(0, 0, 0, 0.45),
+    rgba(0, 0, 0, 0.0)
+  );
+  display: flex;
+  align-items: center;
+  padding: 0 60px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.45rem;
+  white-space: nowrap;
+}
+
+/* Icon inside the gradient box */
+.contact-icon-inline {
+  width: 70px;
+  height: 70px;
+  border-radius: 24px;
+  background: #00000060;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.8);
+  object-fit: contain;
+  padding: 12px;
+  margin-right: 40px;
+}
+
+/* keep packed contacts stack */
+.contacts-page .contacts-wrapper {
+  margin: 0 auto;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.contacts-page .contact-bar {
+  height: 95px;
+}
+.contacts-page .contact-bar-text {
+  height: 95px;
+  padding: 0 40px;
+  font-size: 0.65rem;
+  letter-spacing: 0.40rem;
+}
+.contacts-page .contact-icon-inline {
+  width: 60px;
+  height: 60px;
+  margin-right: 32px;
+}
+
+.contact-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* Animation: initial off-screen state (contacts page only) */
+.contacts-page .contact-bar {
+  transform: translateX(80px);
+  opacity: 0;
+}
+
+/* Animated state (in) */
+.contacts-page .contact-bar.animate-in {
+  animation: contactSlideIn 0.7s ease-out forwards;
+}
+
+/* Keyframes: slide from right and fade in */
+@keyframes contactSlideIn {
+  from {
+    transform: translateX(80px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Stagger by link index (anchors wrap bars) */
+.contacts-page .contacts-wrapper > a:nth-child(1) .contact-bar { animation-delay: 0s; }
+.contacts-page .contacts-wrapper > a:nth-child(2) .contact-bar { animation-delay: 0.1s; }
+.contacts-page .contacts-wrapper > a:nth-child(3) .contact-bar { animation-delay: 0.2s; }
+.contacts-page .contacts-wrapper > a:nth-child(4) .contact-bar { animation-delay: 0.3s; }
+
+/* Out animation: slide to the right and fade out */
+.contacts-page .contact-bar.animate-out {
+  animation: contactSlideOut 0.6s ease-in forwards;
+}
+
+@keyframes contactSlideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(80px);
+    opacity: 0;
+  }
+}
+
+/* ===== PORTFOLIO IN ANIMATIONS ===== */
+
+.portfolio-page .featured-panel {
+  transform: translateX(80px);
+  opacity: 0;
+}
+.portfolio-page .portfolio-grid {
+  transform: translateY(80px);
+  opacity: 0;
+}
+.portfolio-page .featured-panel.portfolio-animate-in {
+  animation: portfolioFeaturedIn 0.7s ease-out forwards;
+}
+.portfolio-page .portfolio-grid.portfolio-animate-in {
+  animation: portfolioGridIn 0.7s 0.15s ease-out forwards;
+}
+@keyframes portfolioFeaturedIn {
+  from { transform: translateX(80px); opacity: 0; }
+  to   { transform: translateX(0);   opacity: 1; }
+}
+@keyframes portfolioGridIn {
+  from { transform: translateY(80px); opacity: 0; }
+  to   { transform: translateY(0);   opacity: 1; }
+}
+
+/* ===== HOME PAGE IN ANIMATIONS ===== */
+
+.home-page .profile-circle.left,
+.home-page .profile-circle.right {
+  transform: translateY(-80px);
+  opacity: 0;
+}
+.home-page .profile-circle.middle {
+  transform: translateY(80px);
+  opacity: 0;
+}
+.home-page .profile-circle.home-animate-in {
+  animation: homeCircleIn 0.7s ease-out forwards;
+}
+@keyframes homeCircleIn {
+  from {
+    transform: translateY(var(--start-offset, 0));
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.home-page .profile-circle.left,
+.home-page .profile-circle.right {
+  --start-offset: -80px;
+}
+.home-page .profile-circle.middle {
+  --start-offset: 80px;
+}
+.home-page .profile-circle.left  { animation-delay: 0s;   }
+.home-page .profile-circle.middle{ animation-delay: 0.1s; }
+.home-page .profile-circle.right { animation-delay: 0.2s; }
+
+/* ===== MEDUSA DETAIL PAGE (ALT CLASSES) ===== */
+
+/* Green background just for this page */
+body.medusa-page-alt {
+  background: linear-gradient(to bottom, #04130a, #045a22);
+}
+
+/* Slightly wider content area for the three panels */
+.medusa-layout-alt {
+  max-width: 1200px;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+}
+
+/* Three-panel layout */
+.medusa-gallery-alt {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1.3fr 1fr;  /* middle larger */
+  column-gap: 2.5vw;                     /* consistent horizontal gap */
+  row-gap: 0;
+  align-items: end;                       /* bottoms line up */
+  margin-top: -10px;
+}
+
+/* Common frame styling */
+.medusa-frame-alt {
+  background: #020b06;
+  border-radius: 40px;
+  box-shadow: 0 12px 45px rgba(0,0,0,0.85);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Side frames */
+.medusa-frame-left-alt,
+.medusa-frame-right-alt {
+  height: 50vh;
+  aspect-ratio: 3 / 4;
+}
+
+/* Center frame */
+.medusa-frame-center-alt {
+  height: 65vh;
+  aspect-ratio: 3 / 4;
+}
+
+/* Images inside frames */
+.medusa-image-alt {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Responsive stacking */
+@media (max-width: 1000px) {
+  .medusa-gallery-alt {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+    row-gap: 24px;
+    margin-top: 40px;
+  }
+
+  .medusa-frame-left-alt,
+  .medusa-frame-right-alt,
+  .medusa-frame-center-alt {
+    height: 50vh;
+  }
+}
+
+
+
+
+
+
+
+/* Brown background just for Artificial page */
+body.artificial-page {
+  background: linear-gradient(to bottom, #2a1308, #8a4a18);
+}
+
+/* Center the strip and hide overflow */
+.artificial-page .layout-wrapper.artificial-layout {
+  max-width: 1100px;
+  display: flex;
+  align-items: flex-start;
+  overflow: hidden;
+  background: transparent;    /* ensure no box color */
+}
+
+/* Track that moves on drag */
+.artificial-track {
+  display: flex;
+  gap: 32px;
+  padding: 0px 0 40px;
+  transform: translateX(0);
+  cursor: grab;
+  transition: transform 0.25s ease-out;
+  background: transparent;    /* no visible box behind items */
+  box-shadow: none;           /* if you had a shadow, remove it */
+}
+
+/* All items: same square size, same position */
+.artificial-item {
+  width: 430px;          /* bigger than 260px */
+  aspect-ratio: 1 / 1;   /* stays a square */
+  border-radius: 26px;
+  overflow: hidden;
+  background: #bc5f56;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0);
+  flex-shrink: 0;
+  transform-origin: center center;
+  transform: none;
+  opacity: 1;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Images fill their squares */
+.artificial-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Drag state */
+.artificial-track.dragging {
+  cursor: grabbing;
+  transition: none;
+}
+.artificial-track.dragging .artificial-item {
+  transition: none;
+}
+
+/* Optional: slightly smaller on narrow screens */
+@media (max-width: 900px) {
+  .artificial-item {
+    width: 210px;
+  }
+}
+
+
+/* Artificial page: menu hover light brown instead of red */
+.artificial-page .sidebar div:not(.selected):hover,
+.artificial-page .sidebar a:hover,
+.artificial-page .sidebar a:focus {
+  color: #e9b17a !important;  /* light brown */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===== FERAL PAGE (SCROLL) ===== */
+
+/* Purple background just for this page, allow scroll */
+/* ===== FERAL CASE STUDY PAGE ===== */
+
+/* Purple gradient and allow scroll only on feral page */
+body.feral-page {
+  background: linear-gradient(to bottom, #1a0127, #5d0c70);
+  height: auto;              /* override global 100vh */
+  overflow-y: auto;          /* enable vertical scroll */
+  overflow-x: hidden;
+}
+
+/* Let main content grow on feral page */
+html.feral-page,
+body.feral-page {
+  height: auto;
+}
+
+/* main-content: remove fixed height so it can scroll */
+.feral-page .main-content {
+  height: auto;
+  align-items: flex-start;
+}
+
+/* layout-wrapper: only gallery in normal flow; character is fixed */
+.feral-page .layout-wrapper.feral-layout {
+  max-width: 1200px;
+  margin: 0 auto 80px;
+  padding: 0 40px;
+  box-sizing: border-box;
+  display: block;           /* no grid; gallery takes full width */
+  position: relative;
+}
+
+/* Gallery holds rows */
+.feral-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Rows inside the gallery */
+.feral-row {
+  display: grid;
+  gap: 24px;
+}
+
+/* Row-specific column setups */
+.feral-row-1 {
+  grid-template-columns: 1.4fr 0.9fr;   /* wide horizontal + vertical */
+}
+
+.feral-row-2 {
+  grid-template-columns: 1fr 1fr 0.9fr; /* two squares + vertical */
+}
+
+.feral-row-3 {
+  grid-template-columns: 1.4fr 0.9fr;   /* wide horizontal + vertical */
+}
+
+/* Base panel styling */
+.feral-panel {
+  width: 100%;
+  border-radius: 36px;
+  overflow: hidden;
+  box-shadow: 0 10px 42px rgba(0,0,0,0.7);
+  background: #15071f;
+}
+
+/* Shape variants */
+.feral-panel-horizontal {
+  aspect-ratio: 14 / 9;    /* horizontal rectangle */
+}
+
+.feral-panel-square {
+  aspect-ratio: 2.6 / 2;     /* square */
+}
+
+.feral-panel-vertical {
+  aspect-ratio: 3 / 3;     /* vertical rectangle */
+}
+
+/* Images respect their panel shapes */
+.feral-panel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Character: big, bottom-right, fixed over the scrolling content */
+.feral-character {
+  position: fixed;
+  right: -18vw;        /* partly off the right edge */
+  bottom: -1vh;        /* sitting near/below bottom edge */
+  z-index: 20;         /* above gallery and other content */
+  pointer-events: none;
+}
+
+.feral-character img {
+  width: 65vw;         /* overall size of character */
+  max-width: 700px;    /* optional clamp */
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* Responsive: avoid extreme cutoff on narrow screens */
+@media (max-width: 900px) {
+  .feral-page .layout-wrapper.feral-layout {
+    padding: 0 20px;
+  }
+
+  .feral-row-1,
+  .feral-row-2,
+  .feral-row-3 {
+    grid-template-columns: 1fr;  /* stack all shapes on small screens */
+  }
+
+  .feral-character {
+    right: -8vw;
+    bottom: -4vh;
+  }
+
+  .feral-character img {
+    width: 80vw;
+    max-width: none;
+  }
+}
+
+
+/* Feral page: menu hover bright purple instead of red */
+.feral-page .sidebar div:not(.selected):hover,
+.feral-page .sidebar a:hover,
+.feral-page .sidebar a:focus {
+  color: #e07bff !important; /* bright purple */
+}
